@@ -6,21 +6,21 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Deployment environment'
+        description: "Deployment environment"
         required: true
-        default: 'development'
+        default: "Development"
         type: string
         options:
-          - development
-          - production
+          - Development
+          - Production
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -43,3 +43,22 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+  DeployDev:
+    runs-on: ubuntu-latest
+    name: Deploy to Development
+    needs: [build]
+    environment:
+      name: Development
+    steps:
+      - name: Deploy
+        run: echo Hello, world!
+
+  DeployProd:
+    runs-on: ubuntu-latest
+    name: Deploy to Production
+    needs: [DeployDev]
+    environment:
+      name: Production
+    steps:
+      - name: Deploy
+        run: echo Hello, world!
